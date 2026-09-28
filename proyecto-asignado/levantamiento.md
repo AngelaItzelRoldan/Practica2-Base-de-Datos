@@ -103,7 +103,7 @@ SELECT * FROM dim_indice_des;
 ```
 Resultado: muestra los 4 niveles de desarrollo que existen en la dimensión.
 
-![Consulta en PgAdmin](evidencias/5-consulta2-pgadmin.png)
+![Consulta en PgAdmin](evidencias/6-consulta2-pgadmin.png)
 
 ## 6. Evidencias 
 
