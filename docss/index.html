@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#173f5a">
+    <meta name="description" content="Panel de administración de Farmacontrol para productos, lotes, compras y ventas.">
+    <title>Farmacontrol | Panel</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#inicio" aria-label="Farmacontrol, inicio">
+          <span class="brand-symbol" aria-hidden="true">+</span>
+          <span>Farmacontrol</span>
+        </a>
+
+        <p class="nav-label">MENÚ</p>
+        <nav class="main-nav" aria-label="Secciones del sistema">
+          <button class="nav-item is-active" type="button" data-view="inicio" aria-current="page"><span class="nav-icon" aria-hidden="true">⌂</span><span>Inicio</span></button>
+          <button class="nav-item" type="button" data-view="productos"><span class="nav-icon" aria-hidden="true">▦</span><span>Productos</span></button>
+          <button class="nav-item" type="button" data-view="lotes"><span class="nav-icon" aria-hidden="true">▤</span><span>Lotes</span></button>
+          <button class="nav-item" type="button" data-view="compras"><span class="nav-icon" aria-hidden="true">↓</span><span>Compras</span></button>
+          <button class="nav-item" type="button" data-view="ventas"><span class="nav-icon" aria-hidden="true">↗</span><span>Ventas</span></button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <span class="sidebar-status-dot" aria-hidden="true"></span>
+          <span>Datos de demostración</span>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Farmacontrol</span><span aria-hidden="true">/</span><strong id="breadcrumb-current">Inicio</strong></div>
+          <div class="topbar-right"><span class="today-label" id="today-label"></span><span class="user-avatar" aria-label="Encargado">E</span></div>
+        </header>
+
+        <div class="content-area">
+          <section class="view is-visible" id="view-inicio" aria-labelledby="title-inicio">
+            <div class="page-heading">
+              <div><p class="eyebrow">PANEL DE CONTROL</p><h1 id="title-inicio">Inicio</h1></div>
+              <button class="button button-primary" type="button" data-open-form="ventas"><span aria-hidden="true">+</span> Nueva venta</button>
+            </div>
+
+            <div class="summary-grid">
+              <article class="summary-card">
+                <div class="summary-icon blue-icon" aria-hidden="true">▦</div>
+                <div><p>Productos disponibles</p><strong id="metric-products">—</strong><small>Con existencias registradas</small></div>
+                <span class="summary-corner" aria-hidden="true">↗</span>
+              </article>
+              <article class="summary-card">
+                <div class="summary-icon amber-icon" aria-hidden="true">◷</div>
+                <div><p>Lotes próximos a caducar</p><strong id="metric-expiring">—</strong><small>Durante los próximos 90 días</small></div>
+                <span class="summary-corner" aria-hidden="true">⌁</span>
+              </article>
+              <article class="summary-card">
+                <div class="summary-icon violet-icon" aria-hidden="true">↗</div>
+                <div><p>Ventas registradas</p><strong id="metric-sales">—</strong><small>En el historial de ejemplo</small></div>
+                <span class="summary-corner" aria-hidden="true">⌁</span>
+              </article>
+            </div>
+
+            <div class="dashboard-grid">
+              <section class="surface-card expiring-card" aria-labelledby="expiring-title">
+                <div class="card-heading"><div><p class="eyebrow">SEGUIMIENTO</p><h2 id="expiring-title">Lotes próximos a caducar</h2></div><button class="text-button" type="button" data-go-view="lotes">Ver lotes <span aria-hidden="true">→</span></button></div>
+                <div id="dashboard-expiring" class="compact-list"></div>
+              </section>
+              <section class="surface-card sales-card" aria-labelledby="recent-sales-title">
+                <div class="card-heading"><div><p class="eyebrow">MOVIMIENTOS</p><h2 id="recent-sales-title">Últimas ventas</h2></div><button class="text-button" type="button" data-go-view="ventas">Ver ventas <span aria-hidden="true">→</span></button></div>
+                <div class="table-wrap"><table><thead><tr><th>Fecha y hora</th><th>Productos</th><th>Total</th><th>Estado</th></tr></thead><tbody id="dashboard-sales"></tbody></table></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="view" id="view-productos" aria-labelledby="title-productos" hidden>
+            <div class="page-heading">
+              <div><p class="eyebrow">CATÁLOGO</p><h1 id="title-productos">Productos</h1><p class="page-subtitle">Consulta y filtra los productos registrados.</p></div>
+              <button class="button button-primary" type="button" data-open-form="productos"><span aria-hidden="true">+</span> Nuevo producto</button>
+            </div>
+            <div class="surface-card table-card">
+              <div class="table-toolbar"><label class="search-box"><span aria-hidden="true">⌕</span><input id="product-search" type="search" placeholder="Buscar producto, principio activo o fabricante" autocomplete="off"></label><label class="filter-select"><span class="sr-only">Filtrar por categoría</span><select id="category-filter"><option value="">Todas las categorías</option></select></label></div>
+              <div class="table-wrap"><table class="products-table"><thead><tr><th>Producto</th><th>Principio activo</th><th>Presentación</th><th>Concentración</th><th>Contenido</th><th>Categoría</th><th>Fabricante</th><th>Precio</th><th>Receta</th><th>Estado</th></tr></thead><tbody id="products-table"></tbody></table></div>
+              <div class="table-footer" id="products-count"></div>
+            </div>
+          </section>
+
+          <section class="view" id="view-lotes" aria-labelledby="title-lotes" hidden>
+            <div class="page-heading">
+              <div><p class="eyebrow">EXISTENCIAS</p><h1 id="title-lotes">Lotes</h1><p class="page-subtitle">Fechas y unidades disponibles por lote.</p></div>
+              <button class="button button-primary" type="button" data-open-form="lotes"><span aria-hidden="true">+</span> Nuevo lote</button>
+            </div>
+            <div class="surface-card table-card">
+              <div class="table-toolbar"><div class="toolbar-note"><span class="legend-dot warning-dot"></span> Próximos a caducar</div><span class="toolbar-count" id="lots-count"></span></div>
+              <div class="table-wrap"><table><thead><tr><th>Producto</th><th>Número de lote</th><th>Fabricación</th><th>Caducidad</th><th>Unidades recibidas</th><th>Unidades disponibles</th><th>Estado</th></tr></thead><tbody id="lots-table"></tbody></table></div>
+            </div>
+          </section>
+
+          <section class="view" id="view-compras" aria-labelledby="title-compras" hidden>
+            <div class="page-heading">
+              <div><p class="eyebrow">ENTRADAS</p><h1 id="title-compras">Compras</h1><p class="page-subtitle">Compras registradas y lotes recibidos.</p></div>
+              <button class="button button-primary" type="button" data-open-form="compras"><span aria-hidden="true">+</span> Nueva compra</button>
+            </div>
+            <div class="surface-card table-card">
+              <div class="table-toolbar"><span class="toolbar-count" id="purchases-count"></span></div>
+              <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Subtotal</th><th>Descuentos</th><th>Impuestos</th><th>Total</th><th>Estado</th><th>Lotes recibidos</th></tr></thead><tbody id="purchases-table"></tbody></table></div>
+            </div>
+          </section>
+
+          <section class="view" id="view-ventas" aria-labelledby="title-ventas" hidden>
+            <div class="page-heading">
+              <div><p class="eyebrow">SALIDAS</p><h1 id="title-ventas">Ventas</h1><p class="page-subtitle">Consulta los productos y los importes de cada venta.</p></div>
+              <button class="button button-primary" type="button" data-open-form="ventas"><span aria-hidden="true">+</span> Nueva venta</button>
+            </div>
+            <div class="surface-card table-card">
+              <div class="table-toolbar"><span class="toolbar-count" id="sales-count"></span></div>
+              <div class="table-wrap"><table><thead><tr><th>Fecha y hora</th><th>Productos</th><th>Subtotal</th><th>Descuentos</th><th>Impuestos</th><th>Total</th><th>Método de pago</th><th>Estado</th></tr></thead><tbody id="sales-table"></tbody></table></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <dialog class="form-dialog" id="entry-dialog" aria-labelledby="dialog-title">
+      <form method="dialog" id="entry-form">
+        <div class="dialog-heading"><div><p class="eyebrow">FORMULARIO DE EJEMPLO</p><h2 id="dialog-title">Nuevo registro</h2></div><button class="close-button" type="button" id="close-dialog" aria-label="Cerrar">×</button></div>
+        <div class="dialog-fields" id="dialog-fields"></div>
+        <p class="demo-note">Formulario de demostración. Los datos no se guardan.</p>
+        <div class="dialog-actions"><button class="button button-secondary" type="button" id="cancel-dialog">Cancelar</button><button class="button button-primary" type="submit">Guardar (demo)</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
